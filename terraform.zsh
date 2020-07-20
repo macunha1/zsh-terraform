@@ -15,20 +15,24 @@ function tf_prompt_info() {
 alias tf=terraform
 
 alias tfi='tf init'
+
 alias tfp='tf plan'
-alias tfa='tf apply'
-
 alias tfip='tfi && tfp'
-alias tfia='tfi && tfa'
-alias tfia!='tfi && tfa -auto-approve'
 
-alias tf.12u='tf 0.12upgrade'
-alias tfc='tf console'
+alias tfa='tf apply'
+alias tfia='tfi && tfa'
 
 alias tfd='tf destroy'
 alias tfid='tfi && tfd'
-alias tfid!='tfi && tfd -auto-approve' # DANGER!
 
+# DANGER zone
+alias tfa!='tfa -auto-approve'
+alias tfia!='tfi && tfa!'
+alias tfd!='tfd -auto-approve'
+alias tfid!='tfi && tfd!' # DANGER++!!
+
+alias tf.12u='tf 0.12upgrade'
+alias tfc='tf console'
 alias tfg='tf graph'
 alias tfc='tf console'
 alias tfget='tf get'

@@ -1,9 +1,11 @@
 Terraform ZSH Plugin
 ====================
 
-Plugin for Terraform, giving extended options than original oh-my-zsh plugin like aliases and autocompletion.
+Plugin for Terraform, extending original oh-my-zsh plugin with aliases and
+autocompletion.
 
-Terraform is a tool from Hashicorp for managing infrastructure safely and efficiently.
+Terraform is a tool from Hashicorp for managing infrastructure safely and
+efficiently.
 
 # Requirements
 
@@ -27,13 +29,16 @@ Terraform is a tool from Hashicorp for managing infrastructure safely and effici
 
 ## Oh My Zsh
 
-1. Clone this repository into `$ZSH_CUSTOM/plugins` (by default `~/.oh-my-zsh/custom/plugins`)
+1. Clone this repository into `$ZSH_CUSTOM/plugins` (by default
+   `~/.oh-my-zsh/custom/plugins`)
 
     ```sh
-    git clone https://github.com/macunha1/zsh-terraform ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-terraform
+    git clone https://github.com/macunha1/zsh-terraform \
+        ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-terraform
     ```
 
-2. Add the plugin to the list of plugins for Oh My Zsh to load (inside `~/.zshrc`):
+2. Add the plugin to the list of plugins for Oh My Zsh to load (inside
+   `~/.zshrc`):
 
     ```sh
     plugins=(zsh-terraform)
@@ -43,7 +48,8 @@ Terraform is a tool from Hashicorp for managing infrastructure safely and effici
 
 ## Manual (Git Clone)
 
-1. Clone this repository somewhere on your machine. This guide will assume `~/.zsh/zsh-terraform`.
+1. Clone this repository somewhere on your machine. This guide will assume
+   `~/.zsh/zsh-terraform`.
 
     ```sh
     git clone https://github.com/macunha1/zsh-terraform ~/.zsh/zsh-terraform
@@ -64,4 +70,4 @@ Terraform is a tool from Hashicorp for managing infrastructure safely and effici
 
 ### TODO
 
-* Auto-detection of Terraform commands (overwriting the _terraform script)
+* Auto-detection of Terraform commands (overwriting [_terraform](_terraform))
