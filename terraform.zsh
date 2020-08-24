@@ -8,8 +8,8 @@ function tf_prompt_info() {
     fi
 }
 
-# If you notice, aliases are bounded to each other
-# Why? Gives the freedom to override the lower levels and affect all of them
+# If you notice, aliases are bound to each other
+# Why? Gives the freedom to override the lower levels and to affect all of them
 # e.g.: alias tfi=terraform init -no-color -reconfigure
 
 alias tf=terraform
@@ -28,10 +28,13 @@ alias tfid='tfi && tfd'
 # DANGER zone
 alias tfa!='tfa -auto-approve'
 alias tfia!='tfi && tfa!'
+# DANGER++!!
 alias tfd!='tfd -auto-approve'
-alias tfid!='tfi && tfd!' # DANGER++!!
+alias tfid!='tfi && tfd!'
 
 alias tf.12u='tf 0.12upgrade'
+alias tf.13u='tf 0.13upgrade'
+
 alias tfc='tf console'
 alias tfg='tf graph'
 alias tfc='tf console'
