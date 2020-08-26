@@ -2,14 +2,21 @@
 
 local -a _terraform_cmds opt_args
 _terraform_cmds=(
+    '0.12upgrade:Rewrites pre-0.12 module source code for v0.12'
+    '0.13upgrade:Rewrites pre-0.13 module source code for v0.13'
     'apply:Builds or changes infrastructure'
     'console:Interactive console for Terraform interpolations'
     'destroy:Destroy Terraform-managed infrastructure'
+    'debug:This command has subcommands for debug output management'
+    'env:Workspace management'
     'fmt:Rewrites config files to canonical format'
+    'force-unlock:Manually unlock the state for the defined configuration.'
     'get:Download and install modules for the configuration'
     'graph:Create a visual graph of Terraform resources'
     'import:Import existing infrastructure into Terraform'
     'init:Initialize a Terraform working directory'
+    'login:Obtain and save credentials for a remote host'
+    'logout:Remove locally-stored credentials for a remote host'
     'output:Read an output from a state file'
     'plan:Generate and show an execution plan'
     'providers:Prints a tree of the providers used in the configuration'
@@ -22,8 +29,6 @@ _terraform_cmds=(
     'validate:Validates the Terraform files'
     'version:Prints the Terraform version'
     'workspace:Workspace management'
-    '0.12upgrade:Rewrites pre-0.12 module source code for v0.12'
-    '0.13upgrade:Rewrites pre-0.13 module source code for v0.13'
 )
 
 __012upgrade() {
@@ -61,6 +66,18 @@ __console() {
         '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
 }
 
+__env() {
+    local -a __env_cmds
+    __env_cmds=(
+        'delete:Delete a workspace'
+        'list:List Workspaces'
+        'new:Create a new workspace'
+        'select:Select a workspace'
+        'show:Show the name of the current workspace'
+    )
+    _describe -t env "env commands" __env_cmds
+}
+
 __destroy() {
     _arguments \
         '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
@@ -85,6 +102,10 @@ __fmt() {
         '-diff=[(false) Display diffs of formatting changes]' \
         '-check=[(false) Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]' \
         '-recursive=[(false) Also process files in subdirectories. By default, only the given directory (or current directory) is processed.]'
+}
+
+__force_unlock() {
+    _arguments
 }
 
 __get() {
@@ -134,6 +155,14 @@ __init() {
         '-verify-plugins=[(true) Verify the authenticity and integrity of automatically downloaded plugins.]'
 }
 
+__login() {
+    _arguments
+}
+
+__logout() {
+    _arguments
+}
+
 __output() {
     _arguments \
         '-state=[(path) Path to the state file to read. Defaults to "terraform.tfstate".]' \
@@ -161,8 +190,7 @@ __plan() {
 }
 
 __providers() {
-    _arguments \
-
+    _arguments
 }
 
 __push() {
@@ -318,14 +346,22 @@ local -a _command_args
 case "$words[1]" in
   0.12upgrade)
     __012upgrade ;;
+  0.13upgrade)
+    __013upgrade ;;
   apply)
     __apply ;;
   console)
     __console;;
   destroy)
     __destroy ;;
+  debug)
+    __debug ;;
+  env)
+    __env ;;
   fmt)
-    __fmt;;
+    __fmt ;;
+  force-unlock)
+    __force_unlock ;;
   get)
     __get ;;
   graph)
@@ -334,6 +370,10 @@ case "$words[1]" in
     __import;;
   init)
     __init ;;
+  login)
+    __login ;;
+  logout)
+    __logout ;;
   output)
     __output ;;
   plan)
