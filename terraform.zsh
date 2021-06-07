@@ -1,14 +1,14 @@
-function tf_prompt_info() {
-    # dont show 'default' workspace in home dir
-    [[ "$PWD" == ~ ]] && return
-    # check if in terraform dir
-    if [ -d .terraform ]; then
-      workspace=$(terraform workspace show 2> /dev/null) || return
-      echo "[${workspace}]"
-    fi
+tf_prompt_info() {
+	# dont show 'default' workspace in home dir
+	[[ "$PWD" == ~ ]] && return
+	# check if in terraform dir
+	if [ -d .terraform ]; then
+		workspace=$(terraform workspace show 2>/dev/null) || return
+		echo "[${workspace}]"
+	fi
 }
 
-# If you notice, aliases are bound to each other
+# If you notice, aliases are bounded to each other
 # Why? Gives the freedom to override the lower levels and to affect all of them
 # e.g.: alias tfi=terraform init -no-color -reconfigure
 
@@ -31,9 +31,6 @@ alias tfia!='tfi && tfa!'
 # DANGER++!!
 alias tfd!='tfd -auto-approve'
 alias tfid!='tfi && tfd!'
-
-alias tf.12u='tf 0.12upgrade'
-alias tf.13u='tf 0.13upgrade'
 
 alias tfc='tf console'
 alias tfg='tf graph'
