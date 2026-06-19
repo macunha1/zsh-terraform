@@ -65,8 +65,24 @@ efficiently.
 ### Features
 
 - Terraform ZSH autocompletion
+- Terraform completion cache under
+  `${XDG_CACHE_HOME:-$HOME/.cache}/zsh/terraform_completion`
 - Terraform aliases
 
-### TODO
+### Completion cache
 
-- Auto-detection of Terraform commands (overwriting [\_terraform](_terraform))
+The plugin generates native zsh completion metadata from Terraform's own help
+output instead of maintaining a static command map in this repository. The first
+completion for a Terraform version writes a generated file to:
+
+```sh
+${XDG_CACHE_HOME:-$HOME/.cache}/zsh/terraform_completion/native-<version>-<path>.zsh
+```
+
+Older generated files are kept, so switching Terraform versions creates a new
+cache entry without deleting completions for previous versions.
+
+The checked-in [\_terraform](_terraform) file is a generator and dispatcher. It
+reads command and subcommand help as each command path is completed, caches
+command labels and flag labels, and still asks Terraform for dynamic values such
+as state addresses and workspace names when needed.

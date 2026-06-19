@@ -50,14 +50,11 @@ alias tfver='tf version'
 alias tfw='tf workspace'
 
 # Check if compinit/complete is loaded
-command -v complete >/dev/null || {
-	# NO: Not loaded yet, let us put it in place
-	autoload -U +X bashcompinit && bashcompinit
-}
-
 command -v compinit >/dev/null || {
 	autoload -Uz +X compinit && compinit
 }
 
-# Load bash-compatible terraform completion
-complete -o nospace -C $(which terraform) terraform
+# Load generated native zsh Terraform completion.
+fpath=("${${(%):-%N}:A:h}" $fpath)
+autoload -Uz _terraform
+compdef _terraform terraform
