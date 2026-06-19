@@ -49,6 +49,28 @@ alias tfv='tf validate'
 alias tfver='tf version'
 alias tfw='tf workspace'
 
+__terraform_preload_completion_cache() {
+	local terraform_path terraform_version terraform_path_key terraform_cache_dir terraform_cache_file
+
+	terraform_path="${commands[terraform]:-}"
+	[[ -n "$terraform_path" ]] || terraform_path="$(command -v terraform 2>/dev/null)" || return 0
+
+	terraform_version="$("$terraform_path" version -json 2>/dev/null | sed -n 's/.*"terraform_version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n 1)"
+	[[ -n "$terraform_version" ]] || terraform_version="$("$terraform_path" version 2>/dev/null | sed -n '1s/^Terraform v//p' | awk '{print $1}')"
+	[[ -n "$terraform_version" ]] || return 0
+
+	terraform_path_key="${terraform_path//[^A-Za-z0-9._-]/_}"
+	terraform_cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/terraform_completion/${terraform_version}/native-${terraform_path_key}"
+
+	typeset -g _terraform_completion_path="$terraform_path"
+	typeset -g _terraform_completion_version="$terraform_version"
+	typeset -gA _terraform_generated_commands _terraform_generated_options
+
+	for terraform_cache_file in "${terraform_cache_dir}"/*.zsh(N); do
+		source "$terraform_cache_file"
+	done
+}
+
 # Check if compinit/complete is loaded
 command -v compinit >/dev/null || {
 	autoload -Uz +X compinit && compinit
@@ -58,3 +80,5 @@ command -v compinit >/dev/null || {
 fpath=("${${(%):-%N}:A:h}" $fpath)
 autoload -Uz _terraform
 compdef _terraform terraform
+__terraform_preload_completion_cache
+unfunction __terraform_preload_completion_cache

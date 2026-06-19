@@ -71,18 +71,29 @@ efficiently.
 
 ### Completion cache
 
-The plugin generates native zsh completion metadata from Terraform's own help
-output instead of maintaining a static command map in this repository. The first
-completion for a Terraform version writes a generated file to:
+The plugin generates native ZSH completion metadata from Terraform's own help
+output instead of maintaining a static command map in this repository. Completion
+metadata is cached per Terraform version, executable path, and command branch:
 
 ```sh
-${XDG_CACHE_HOME:-$HOME/.cache}/zsh/terraform_completion/native-<version>-<path>.zsh
+${XDG_CACHE_HOME:-$HOME/.cache}/zsh/terraform_completion/
+└── <terraform_version>/
+    └── native-<terraform_binary_path>/
+        ├── <subcommand-A>.zsh
+        ├── <subcommand-B>.zsh
+        ├── <subcommand-1>-<subcommand-N>.zsh
+        └── root.zsh
 ```
 
-Older generated files are kept, so switching Terraform versions creates a new
-cache entry without deleting completions for previous versions.
+Older generated files are kept, so switching Terraform versions creates new
+cache entries without deleting completions for previous versions. Once a branch
+cache file exists, later completions source it and do not rewrite it.
+
+When the plugin loads, it preloads any existing branch cache files for the
+active Terraform version and executable path into zsh memory. Missing branch
+files are still generated on demand and then reused by later shells.
 
 The checked-in [\_terraform](_terraform) file is a generator and dispatcher. It
-reads command and subcommand help as each command path is completed, caches
-command labels and flag labels, and still asks Terraform for dynamic values such
-as state addresses and workspace names when needed.
+reads command and subcommand help to cache command labels and flag labels, and
+still asks Terraform for dynamic values such as state addresses and workspace
+names when needed.
