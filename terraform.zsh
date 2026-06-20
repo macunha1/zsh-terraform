@@ -73,7 +73,7 @@ __terraform_preload_completion_cache() {
 
 # Check if compinit/complete is loaded
 command -v compinit >/dev/null || {
-	autoload -Uz +X compinit && compinit
+	autoload -Uz +X compinit && compinit -i
 }
 
 # Load generated native zsh Terraform completion.
