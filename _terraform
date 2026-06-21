@@ -122,6 +122,19 @@ __terraform_cache_branch_file() {
   print -r -- "${cache_dir}/native-${cache_key}/${branch_key}.zsh"
 }
 
+__terraform_completion_notice() {
+  emulate -L zsh
+  setopt no_aliases
+
+  local message="$1" enabled
+
+  zstyle -s ':zsh-terraform:completion' messages enabled || enabled=yes
+  [[ "$enabled" == (yes|true|on|1) ]] || return 0
+  (( ${+builtins[zle]} )) || return 0
+
+  zle -M "$message" 2>/dev/null || true
+}
+
 __terraform_load_command_cache() {
   emulate -L zsh
   setopt no_aliases
@@ -137,6 +150,8 @@ __terraform_load_command_cache() {
   cache_dir="${cache_file:h}"
 
   if [[ ! -r "$cache_file" ]]; then
+    __terraform_completion_notice "zsh-terraform: generating completion for terraform ${command_path:-commands}..."
+
     command mkdir -p "$cache_dir" 2>/dev/null || return 1
 
     if [[ -n "$command_path" ]]; then
@@ -157,6 +172,8 @@ __terraform_load_command_cache() {
       print -r -- "typeset -g _terraform_generated_commands[${(qqq)key}]=${(qqq)commands}"
       print -r -- "typeset -g _terraform_generated_options[${(qqq)key}]=${(qqq)options}"
     } >| "$cache_file"
+  else
+    __terraform_completion_notice "zsh-terraform: loading completion from cache for terraform ${command_path:-commands}..."
   fi
 
   source "$cache_file"
@@ -197,6 +214,7 @@ __terraform_complete_generated() {
   if [[ -n "$_terraform_completion_version" ]]; then
     terraform_version="$_terraform_completion_version"
   else
+    __terraform_completion_notice "zsh-terraform: checking Terraform version..."
     terraform_version="$(__terraform_version "$terraform_path")"
     _terraform_completion_version="$terraform_version"
   fi

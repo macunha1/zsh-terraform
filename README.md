@@ -142,9 +142,19 @@ Terraform versions creates or reuses the relevant cache entries instead of
 overwriting completion files for other versions. Once a branch cache file
 exists, later completions source it and do not rewrite it.
 
-When the plugin loads, it preloads any existing branch cache files for the
-active Terraform version and executable path into zsh memory. Missing branch
-files are still generated on demand and then reused by later shells.
+Cache files are loaded lazily when Terraform completion is invoked, so opening a
+new shell does not run Terraform or scan completion cache directories. The first
+completion in a shell loads the relevant branch cache into zsh memory; missing
+branch files are generated on demand and then reused by later completions and
+later shells.
+
+While a branch is being loaded or generated, the plugin reports the current
+operation through ZLE so the shell does not appear frozen. These messages can be
+disabled with:
+
+```zsh
+zstyle ':zsh-terraform:completion' messages no
+```
 
 The checked-in [\_terraform](_terraform) file is a generator and dispatcher. It
 reads command and subcommand help to cache command labels and flag labels, and
